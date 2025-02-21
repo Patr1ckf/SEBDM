@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Panel</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/admin/dane_pracownikowC.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link rel="icon" href="/icon/crystal-ball.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="/static">Amusement Park</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/index}">Main Page</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/main}">Panel</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:inline="text" style="color:lightskyblue;">Logged in as
+                        [[${#httpServletRequest.remoteUser}]]</a>
+                </li>
+
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" id="logoutForm">
+                        <a class="nav-link" href="javascript:{}"
+                           onclick="document.getElementById('logoutForm').submit();">Log out</a>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div align="center">
+    <h1>Salaries</h1>
+
+    <br/><br/>
+
+    <!-- Table -->
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Gross salary</th>
+            <th>Net salary</th>
+            <th>Employee's ID</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="salaries : ${salariesList}">
+            <td th:text="${salaries.date}">Date</td>
+            <td th:text="${salaries.gross_salary}">Gross salary</td>
+            <td th:text="${salaries.net_salary}">Net salary</td>
+            <td th:text="${salaries.id_employee}">Employee's ID</td>
+
+            <td>
+                <a th:href="@{'/editW/' + ${salaries.id_salary}}" class="add-button2">Edit</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a th:href="@{'/deleteW/' + ${salaries.id_salary}}" class="add-button2">Delete</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/newW}" class="add-button">Add new salary</a>
+
+
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+<script>
+    let lastScrollY = window.scrollY;
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > lastScrollY) {
+            navbar.classList.add("hidden");
+        } else {
+            navbar.classList.remove("hidden");
+        }
+        lastScrollY = window.scrollY;
+    });
+
+</script>
+</body>
+</html>

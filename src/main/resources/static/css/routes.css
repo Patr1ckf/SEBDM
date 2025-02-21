@@ -1,0 +1,38 @@
+.map-container {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    margin: 50px auto;
+    background-color: #f4f4f4;
+    border: 2px solid #ccc;
+}
+
+.path {
+    stroke-dasharray: 4, 4;
+}
+
+.circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease;
+}
+
+.circle:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    background-color: red;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 10;
+}

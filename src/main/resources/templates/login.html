@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Login</title>
+
+  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/css/loginC.css}"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+  <link rel="icon" href="/icon/crystal-ball.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-image: url("/static/img/pht.jpg");
+    }
+  </style>
+
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Amusement Park</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:action="@{/index}">Main Page</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/main}">Employees Portal</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="overlay">
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-4 mt-5">
+
+      <form method="post" th:action="@{/login}">
+
+        <div class="form-group">
+          <label class="white-text" for="login">Login:</label>
+          <input id="login" type="text" placeholder="Enter login:" autocomplete="off" class="form-control" name="username"/>
+        </div>
+
+        <div class="form-group">
+          <label class="white-text" for="password">Password:</label>
+          <input id="password" type="password" placeholder="Enter password:" autocomplete="off" class="form-control" name="password"/>
+        </div>
+
+        <div th:if="${param.error}" style="color: rgb(192, 244, 5); margin-bottom:15px">
+          ERROR: Invalid login or password
+        </div>
+
+        <button class="button button2" type="submit" value="Sign In">Log in</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

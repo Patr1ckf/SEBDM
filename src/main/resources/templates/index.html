@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Amusement Park</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/indexC.css}"/>
+    <link rel="icon" href="/icon/crystal-ball.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Kalam:wght@300;400;700&family=Lobster&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-image: url("static/img/pht.jpg");
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Amusement Park</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:action="@{/index}">Main Page</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/main}">Employees Portal</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="overlay">
+    <div class="route-select">
+        <h4>Choose the best route for you</h4>
+
+        <div class="input-group">
+            <label for="age">Select Age:</label>
+            <input type="number" id="age" min="0" max="100" placeholder="Enter age" required>
+        </div>
+
+        <div class="input-group">
+            <label for="time">Select Duration:</label>
+            <input type="number" id="time" min="1" max="1000" placeholder="Enter minutes" required>
+        </div>
+
+        <button class="button2" id="findRoute">Find Route</button>
+        <p id="routeMessage"></p>
+
+    </div>
+
+
+    <div class="map-section">
+        <div class="nap">
+            <h3>Park map</h3>
+        </div>
+        <div id="map-container"></div>
+        <script type="module">
+            import routes from '/static/js/routes.js';
+            const map = new routes('map-container');
+        </script>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+    function highlightRouteOnMap(route) {
+        console.log("Highlighting route:", route);
+
+        const prevPath = document.querySelector(".highlighted-path");
+        const prevCircles = document.querySelectorAll(".highlighted-circle");
+
+
+        document.querySelectorAll(".path").forEach(path => {
+            path.classList.remove("highlighted-path");
+            path.classList.remove("shrinking-path");
+        });
+
+        document.querySelectorAll(".map-point").forEach(circle => {
+            circle.classList.remove("highlighted-circle");
+            circle.classList.remove("highlighted-shared-circle");
+            circle.classList.remove("shrinking-circle");
+        });
+
+        const selectedPath = document.querySelector(`.path[data-route="${route}"]`);
+        if (selectedPath) {
+            if (prevPath) {
+                prevPath.classList.add("shrinking-path");
+            }
+            selectedPath.classList.add("highlighted-path");
+        }
+
+        const selectedCircles = document.querySelectorAll(`.map-point[data-route="${route}"]`);
+        selectedCircles.forEach(circle => {
+            circle.classList.add("highlighted-circle");
+        });
+
+        if (prevCircles.length > 0) {
+            prevCircles.forEach(circle => {
+                circle.classList.add("shrinking-circle");
+            });
+        }
+
+        if (route === 'dragon_route' || route === 'smurfs_route') {
+            const sharedCircles = document.querySelectorAll('.shared-circle');
+            sharedCircles.forEach(sharedCircle => {
+                sharedCircle.classList.add("highlighted-shared-circle");
+            });
+
+            const sharedCircles2 = document.querySelectorAll('.shared-circle2');
+            sharedCircles2.forEach(sharedCircle2 => {
+                sharedCircle2.classList.add("highlighted-shared-circle2");
+            });
+        }
+    }
+
+    document.getElementById("findRoute").addEventListener("click", function() {
+        let age = parseInt(document.getElementById("age").value);
+        let time = parseInt(document.getElementById("time").value);
+        let messageElement = document.getElementById("routeMessage");
+        const prevPath = document.querySelector(".highlighted-path");
+
+        document.querySelector(".route-select").style.height = "300px";
+
+
+        if (isNaN(age) || isNaN(time) || age > 120) {
+            messageElement.textContent = "Please enter valid values for age and time!";
+            messageElement.style.color = "red";
+            document.querySelector(".route-select").style.height = "350px";
+            messageElement.style.color = "rgb(192, 244, 5)";
+            messageElement.style.fontWeight = "bold";
+            prevPath.classList.add("shrinking-path");
+            document.querySelectorAll(".path").forEach(path => {
+                path.classList.remove("highlighted-path");
+                path.classList.add("shrinking-path");
+
+                document.querySelectorAll(".map-point").forEach(circle => {
+                    circle.classList.remove("highlighted-circle");
+                    circle.classList.remove("highlighted-shared-circle");
+                    circle.classList.remove("highlighted-shared-circle2");
+
+                    const isShared1 = circle.classList.contains('shared-circle');
+                    const isShared2 = circle.classList.contains('shared-circle2');
+                    if (isShared1) {
+                        circle.classList.add("shrinking-shared-circle");
+                    }
+                    else if (isShared2){
+                        circle.classList.add("shrinking-shared-circle2");
+                    }
+                    else{
+                        circle.classList.add("shrinking-circle");
+                    }
+                });
+            });
+            return;
+        }
+
+        let selectedRoute = null;
+
+        if (age <= 12) {
+            selectedRoute = "smurfs_route";
+        } else if (age > 12) {
+            if (time > 0 && time < 50) {
+                selectedRoute = "smurfs_route";
+            }
+            if (time >= 50) {
+                selectedRoute = "dragon_route";
+            }
+        }
+
+
+        if (selectedRoute) {
+            messageElement.textContent = "";
+            console.log("Selected Route:", selectedRoute);
+            highlightRouteOnMap(selectedRoute);
+        } else {
+            messageElement.textContent = "No suitable route found for the given parameters.";
+            document.querySelector(".route-select").style.height = "350px";
+            messageElement.style.color = "rgb(192, 244, 5)";
+            messageElement.style.fontWeight = "bold";
+            document.querySelectorAll(".path").forEach(path => {
+                path.classList.remove("highlighted-path");
+                path.classList.add("shrinking-path");
+
+                document.querySelectorAll(".map-point").forEach(circle => {
+                    circle.classList.remove("highlighted-circle");
+                    circle.classList.remove("highlighted-shared-circle");
+                    circle.classList.remove("highlighted-shared-circle2");
+
+                    const isShared1 = circle.classList.contains('shared-circle');
+                    const isShared2 = circle.classList.contains('shared-circle2');
+                    if (isShared1) {
+                        circle.classList.add("shrinking-shared-circle");
+                    }
+                    else if (isShared2){
+                        circle.classList.add("shrinking-shared-circle2");
+                    }
+                    else{
+                        circle.classList.add("shrinking-circle");
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>
+
